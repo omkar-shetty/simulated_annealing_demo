@@ -13,7 +13,7 @@ cat(paste0('The cost value is ',calc_cost(old_path),'\n'))
 
 record <- data.frame(iter = numeric(0), cost = numeric(0))
 
-for (i in 1:100000){
+for (i in 1:1e5){
   
   new_path <- swap_cities(old_path)
   
