@@ -1,9 +1,4 @@
 
-# plot(coords.df)
-# lines(x = coords.df$long, y = coords.df$lat, type = "l")
-# 
-# calc_cost(coords.df)
-
 library(data.table)
 
 calc_cost <- function(path){
@@ -51,4 +46,9 @@ swap_cities <- function(path,city1 = NULL,city2 = NULL, random_var = TRUE){
   path[city2,] <- city1_coords
   
   return(path)
+}
+
+acc_func <- function(d,temp){
+  prob <- ifelse(d <= 0,1,exp(-d/temp))
+  return(prob)
 }
