@@ -65,7 +65,7 @@ sa_tsp <- function(city_list,temp_initial,cooling_const,temp_min, max_iter){
   
 }
 
-sa_tsp_v2 <- function(city_list,temp_initial,cooling_const,temp_min, max_iter){
+sa_tsp_v2 <- function(city_list,temp_initial,cooling_const,temp_min, max_iter, verbose = F){
   
   path <- city_list
   path <- path[sample(nrow(path)),]
@@ -101,7 +101,7 @@ sa_tsp_v2 <- function(city_list,temp_initial,cooling_const,temp_min, max_iter){
       
       record <- rbind(record,data.table("iter" = k,"cost" = calc_cost(path),"temp" = temp))
       
-      if(k%%500 == 0){
+      if(k%%500 == 0 & verbose){
         plot_path(path)
         cat(paste0('Cost at iteration ', k ,'& temp ',temp,' is ',calc_cost(path),'\n'))
       }
@@ -121,6 +121,6 @@ sa_tsp_v2 <- function(city_list,temp_initial,cooling_const,temp_min, max_iter){
   
 }
 
-x <- sa_tsp(city_list = coords.df, temp_initial = 3, cooling_const = 0.99, temp_min = 0.01, max_iter = 1000)
+#x <- sa_tsp(city_list = coords.df, temp_initial = 3, cooling_const = 0.99, temp_min = 0.01, max_iter = 1000)
 
-saveRDS(x,'C:/ORS/Hack_Clubs_Data/SA_TSP/run_6x6.RDS')
+#saveRDS(x,'C:/ORS/Hack_Clubs_Data/SA_TSP/run_6x6.RDS')

@@ -1,6 +1,8 @@
 ---
-title: "Demo: Simulated Annealing"
-output: html_notebook
+title: 'Demo: Simulated Annealing'
+output:
+  html_document: default
+  html_notebook: default
 ---
 This demo was created as part of the Knowledge Sharing Session for AAConf in Jun'19. 
 
@@ -17,37 +19,35 @@ source('functions/utility_functions.R')
 
 Part 1: Problem Definition
 
-```{r, echo = TRUE}
-
+```{r echo = TRUE}
 # Set 1
 square_grid <- data.table(long = rep(1:6,each = 6), lat = rep(1:6,6))
 plot_path(square_grid)
-
 ```
 
-```{r, echo=TRUE}
+Western Sahara Circuit
 
+```{r echo = TRUE}
 # Set 2  Western Sahara 29 cities
-
 ws_grid <- structure(list(long = c(20833.3333, 20900, 21300, 21600, 21600, 
 21600, 22183.3333, 22583.3333, 22683.3333, 23616.6667, 23700, 
 23883.3333, 24166.6667, 25149.1667, 26133.3333, 26150, 26283.3333, 
 26433.3333, 26550, 26733.3333, 27026.1111, 27096.1111, 27153.6111, 
-27166.6667, 27233.3333, 27233.3333, 27266.6667, 27433.3333, 27462.5
-), lat = c(17100, 17066.6667, 13016.6667, 14150, 14966.6667, 
+27166.6667, 27233.3333, 27233.3333, 27266.6667, 27433.3333, 27462.5), 
+lat = c(17100, 17066.6667, 13016.6667, 14150, 14966.6667, 
 16500, 13133.3333, 14300, 12716.6667, 15866.6667, 15933.3333, 
 14533.3333, 13250, 12365.8333, 14500, 10550, 12766.6667, 13433.3333, 
 13850, 11683.3333, 13051.9444, 13415.8333, 13203.3333, 9833.3333, 
-10450, 11783.3333, 10383.3333, 12400, 12992.2222)), class = "data.frame", row.names = c(NA, 
--29L))
-plot_path(ws_grid)
+10450, 11783.3333, 10383.3333, 12400, 12992.2222)), 
+class = "data.frame", row.names = c(NA, -29L))
 
+plot_path(ws_grid)
 ```
 
 
 Part 1: Hill Climber / Greedy Search
 
-```{r, echo = T}
+```{r echo = TRUE}
 # Source the relevant files
 
 source('functions/hill_climber.R')
@@ -57,16 +57,32 @@ plot_path(opt_path$path)
 
 ```
 
+```{r echo = TRUE}
+# Cost of the 'optimal' path from the hill climber
 
-
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
-```{r}
-plot(cars)
+calc_cost(opt_path$path)
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+The biggest drawbac of the hill climber is that it is quite likely to be stuc in a local optima. One option around this is to have multiple hill climbers, each initialised at different starting points.
+However, it is often easier to opt for a better algorithm - for example, simulated annealing.
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+```{r echo = TRUE}
+# Source the relevant files
+
+source('functions/simulated_annealing_tsp.R')
+
+opt_sa_path <- sa_tsp_v2(city_list = square_grid, temp_initial = 1, cooling_const = 0.99981, temp_min = 0.01, max_iter = 10000)
+plot_path(opt_sa_path$best_path)
+
+```
+
+```{r echo = TRUE}
+# Cost of the best path from the SA algorithm
+
+calc_cost(opt_sa_path$best_path)
+```
+
+In general, the simulated annealing algorithm returns a 'good' solution but not necessarily the global optima.
+Hence this algorithm is usually used in cases where a 
+
+
